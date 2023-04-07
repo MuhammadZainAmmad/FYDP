@@ -1,0 +1,7 @@
+# ignoring the original dataset images folders
+1_OriginalDataset_FashionProductImagesSmall/images
+1_OriginalDataset_FashionProductImagesSmall/images.zip
+
+# ignoring the male dataset images folders
+2_SeparatingMaleDataset/maleDatasetImages
+2_SeparatingMaleDataset/maleDatasetImages.zip
