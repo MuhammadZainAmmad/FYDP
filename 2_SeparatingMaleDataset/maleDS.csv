@@ -3265,7 +3265,6 @@ id,gender,articleType,usage
 16428,Men,Tshirts,Casual
 33905,Men,Watches,Casual
 44857,Men,Tshirts,Casual
-39403,Men,Shirts,Casual
 41519,Men,Sunglasses,Casual
 11269,Men,Tshirts,Sports
 2169,Men,Shirts,Casual
@@ -8026,7 +8025,6 @@ id,gender,articleType,usage
 14708,Men,Shirts,Formal
 36458,Men,Sports Shoes,Sports
 44844,Men,Tshirts,Casual
-39410,Men,Shirts,Casual
 11874,Men,Formal Shoes,Casual
 5951,Men,Shirts,Casual
 4883,Men,Tshirts,Casual
@@ -16029,7 +16027,6 @@ id,gender,articleType,usage
 13964,Men,Shirts,Formal
 28325,Men,Sandals,Casual
 31208,Men,Sports Shoes,Sports
-39401,Men,Jeans,Casual
 44855,Men,Tshirts,Casual
 36449,Men,Casual Shoes,Casual
 33907,Men,Watches,Casual
@@ -18078,7 +18075,6 @@ id,gender,articleType,usage
 11841,Men,Casual Shoes,Casual
 5964,Men,Shirts,Casual
 44871,Men,Shorts,Casual
-39425,Men,Tshirts,Casual
 49752,Men,Ties,Formal
 31648,Men,Shirts,Formal
 13518,Men,Shirts,Casual
@@ -19886,7 +19882,6 @@ id,gender,articleType,usage
 10410,Men,Tshirts,Casual
 32740,Men,Sports Shoes,Sports
 3710,Men,Belts,Casual
-12347,Men,Suits,Casual
 35565,Men,Casual Shoes,Casual
 4151,Men,Sports Shoes,Sports
 36784,Men,Watches,Casual
