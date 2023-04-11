@@ -7,11 +7,11 @@
 2_SeparatingMaleDataset/maleDS.zip
 
 # ignoring the separate img folders for each usage label
-2_SeparatingMaleDataset/Formal 
-2_SeparatingMaleDataset/Party
-2_SeparatingMaleDataset/SmartCasual
-2_SeparatingMaleDataset/Ethnic
-2_SeparatingMaleDataset/Home
-2_SeparatingMaleDataset/Casual
-2_SeparatingMaleDataset/Sports
-2_SeparatingMaleDataset/Travel
+2_SeparatingMaleDataset/Formal/ 
+2_SeparatingMaleDataset/Party/
+2_SeparatingMaleDataset/SmartCasual/
+2_SeparatingMaleDataset/Ethnic/
+2_SeparatingMaleDataset/Home/
+2_SeparatingMaleDataset/Casual/
+2_SeparatingMaleDataset/Sports/
+2_SeparatingMaleDataset/Travel/
