@@ -15,3 +15,6 @@
 2_SeparatingMaleDataset/Casual/
 2_SeparatingMaleDataset/Sports/
 2_SeparatingMaleDataset/Travel/
+
+# ignoring the saved model file
+4_CausualFormalPredUsingANN/ANN_2Hidden.h5
