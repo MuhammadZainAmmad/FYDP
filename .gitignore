@@ -16,5 +16,6 @@
 2_SeparatingMaleDataset/Sports/
 2_SeparatingMaleDataset/Travel/
 
-# ignoring the saved model file
+# ignoring the saved images np array, model file
+4_CausualFormalPredUsingANN/imgsNpArr.npy
 4_CausualFormalPredUsingANN/ANN_2Hidden.h5
