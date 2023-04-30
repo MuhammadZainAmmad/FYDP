@@ -18,4 +18,5 @@
 
 # ignoring the saved images np array, model file
 4_CausualFormalPredUsingANN/imgsNpArr.npy
+4_CausualFormalPredUsingANN/encodedUsageFormalCasual.csv
 4_CausualFormalPredUsingANN/ANN_2Hidden.h5
