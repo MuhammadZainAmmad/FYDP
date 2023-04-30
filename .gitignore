@@ -17,6 +17,10 @@
 2_SeparatingMaleDataset/Travel/
 
 # ignoring the saved images np array, model file
+4_CausualFormalPredUsingANN/.ipynb_checkpoints/
+4_CausualFormalPredUsingANN/tensorboard_cifar_logs/
 4_CausualFormalPredUsingANN/casualFormalImgsNpArr.npy
 4_CausualFormalPredUsingANN/encodedUsageFCNpArr.npy
+4_CausualFormalPredUsingANN/df_images.npy
+4_CausualFormalPredUsingANN/df_usageEncoded.npy
 4_CausualFormalPredUsingANN/ANN_2Hidden.h5
