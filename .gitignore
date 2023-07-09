@@ -6,24 +6,19 @@
 2_SeparatingMaleDataset/maleDS
 2_SeparatingMaleDataset/maleDS.zip
 
-# ignoring the separate img folders for each usage label
-2_SeparatingMaleDataset/Formal/ 
-2_SeparatingMaleDataset/Party/
-2_SeparatingMaleDataset/Smart Casual/
-2_SeparatingMaleDataset/Ethnic/
-2_SeparatingMaleDataset/Home/
-2_SeparatingMaleDataset/Casual/
-2_SeparatingMaleDataset/Sports/
-2_SeparatingMaleDataset/Travel/
+# ignoring the separate img folders for each articleType and usage label
+3_PreprocessingMaleDS/articleTypes/
+3_PreprocessingMaleDS/usage/
+
 
 # ignoring the saved images np array, model file
-4_CausualFormalPredUsingANN/.ipynb_checkpoints/
-4_CausualFormalPredUsingANN/tensorboard_cifar_logs/
-4_CausualFormalPredUsingANN/casualFormalImgsNpArr.npy
-4_CausualFormalPredUsingANN/encodedUsageFCNpArr.npy
-4_CausualFormalPredUsingANN/df_images.npy
-4_CausualFormalPredUsingANN/df_usageEncoded.npy
-4_CausualFormalPredUsingANN/ANN_2Hidden.h5
-4_CausualFormalPredUsingANN/casualShirt.jpg
-4_CausualFormalPredUsingANN/formalShirt.jpg
-4_CausualFormalPredUsingANN/formalShirt2.jpg
+5_CausualFormalPredUsingANN/.ipynb_checkpoints/
+5_CausualFormalPredUsingANN/tensorboard_cifar_logs/
+5_CausualFormalPredUsingANN/casualFormalImgsNpArr.npy
+5_CausualFormalPredUsingANN/encodedUsageFCNpArr.npy
+5_CausualFormalPredUsingANN/df_images.npy
+5_CausualFormalPredUsingANN/df_usageEncoded.npy
+5_CausualFormalPredUsingANN/ANN_2Hidden.h5
+5_CausualFormalPredUsingANN/casualShirt.jpg
+5_CausualFormalPredUsingANN/formalShirt.jpg
+5_CausualFormalPredUsingANN/formalShirt2.jpg
