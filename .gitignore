@@ -8,6 +8,7 @@
 
 # ignoring the separate img folders for each articleType and usage label
 3_PreprocessingMaleDS/articleTypes/
+3_PreprocessingMaleDS/reduced_articleTypes/
 3_PreprocessingMaleDS/usage/
 
 
