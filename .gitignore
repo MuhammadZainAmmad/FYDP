@@ -10,6 +10,7 @@
 3_PreprocessingMaleDS/articleTypes/
 3_PreprocessingMaleDS/reduced_articleTypes/
 3_PreprocessingMaleDS/usage/
+3_PreprocessingMaleDS/finalDS/
 
 
 # ignoring the saved images np array, model file
