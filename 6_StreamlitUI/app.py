@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 
 # Load the saved Keras model
-model = tf.keras.models.load_model('../4_CausualFormalPredUsingANN/ANN_2Hidden.h5')
+model = tf.keras.models.load_model('../5_CausualFormalPredUsingANN/ANN_2Hidden.h5')
 
 # Create the user interface
 st.title('Clothing Formality Predictor')
