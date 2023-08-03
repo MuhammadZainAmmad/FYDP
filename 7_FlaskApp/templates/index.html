@@ -2,25 +2,20 @@
 <html>
 <head>
     <title>Image Classification Web App</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Image Classification Web App</h1>
-    <form action="/predict" method="post" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="Predict">
-    </form>
+    {% include 'header.html' %}
+    <div class="upload-container">
+        <label for="file-upload" class="upload-btn">Choose an Image</label>
+        <input type="file" id="file-upload" accept="image/*">
+    </div>
+    <img src="#" id="preview-image" alt="Preview">
+    <button class="predict-btn" id="predict-button" disabled>Predict</button>
     <div id="result"></div>
-    <script>
-        document.querySelector('form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const response = await fetch('/predict', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-            document.getElementById('result').innerText = `Predicted Label: ${data.predicted_label}`;
-        });
-    </script>
+
+    {% include 'footer.html' %}
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
