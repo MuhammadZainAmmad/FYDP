@@ -3,6 +3,11 @@ const predictButton = document.getElementById('predict-button');
 const previewImage = document.getElementById('preview-image');
 const resultDiv = document.getElementById('result');
 
+const labelMap = {
+    0: 'Informal',
+    1: 'Formal',
+};
+
 fileUpload.addEventListener('change', function () {
     if (fileUpload.files && fileUpload.files[0]) {
         const reader = new FileReader();
@@ -24,5 +29,7 @@ document.getElementById('predict-button').addEventListener('click', async () => 
         body: formData
     });
     const data = await response.json();
-    resultDiv.innerText = `Predicted Label: ${data.predicted_label}`;
+
+    const predictedLabel = labelMap[data.predicted_label];
+    resultDiv.innerText = `Predicted Label: ${predictedLabel}`;
 });

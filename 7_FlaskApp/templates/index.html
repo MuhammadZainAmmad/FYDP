@@ -10,11 +10,15 @@
         <label for="file-upload" class="upload-btn">Choose an Image</label>
         <input type="file" id="file-upload" accept="image/*">
     </div>
-    <img src="#" id="preview-image" alt="Preview">
+
+     <div class="image-preview-container">
+        <img src="#" id="preview-image" alt="Preview">
+    </div>
+    
     <button class="predict-btn" id="predict-button" disabled>Predict</button>
     <div id="result"></div>
 
-    {% include 'footer.html' %}
+    <!-- {% include 'footer.html' %} -->
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
