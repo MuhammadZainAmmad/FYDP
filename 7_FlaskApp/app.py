@@ -65,8 +65,9 @@ def store_image():
         prediction = loaded_model.predict(input_img)
         predicted_label = np.argmax(prediction)
 
-        # Convert predicted_label to a Python int
-        predicted_label = int(predicted_label)
+        # Convert predicted_label to a human-readable label
+        label_map = {0: 'Informal', 1: 'Formal'}
+        predicted_label = label_map.get(predicted_label)
 
         # Save the image and label in the database
         img_byte_array = file.read()
@@ -77,6 +78,7 @@ def store_image():
         return jsonify({'message': 'Image and label stored successfully!'})
     else:
         return jsonify({'error': 'No file uploaded.'}), 400
+
 
 @app.route('/dashboard')
 def dashboard():
