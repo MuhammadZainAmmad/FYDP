@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="image-dashboard">
+        {% for image in images %}
+        <div class="image-item">
+            <img src="data:image/jpeg;base64,{{ image[0] }}" alt="Image">
+            <!-- <img src="{{ image[0] }}" alt="Image"> -->
+            <p>Label: {{ image[1] }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- {% include 'footer.html' %} -->
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

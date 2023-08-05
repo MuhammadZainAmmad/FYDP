@@ -4,6 +4,7 @@ import tensorflow as tf
 from flask import Flask, render_template, request, jsonify
 from PIL import Image
 import mysql.connector
+import base64
 
 app = Flask(__name__)
 model_path = './ANN_2Hidden.h5'
@@ -76,6 +77,28 @@ def store_image():
         return jsonify({'message': 'Image and label stored successfully!'})
     else:
         return jsonify({'error': 'No file uploaded.'}), 400
+
+@app.route('/dashboard')
+def dashboard():
+    try:
+        # Retrieve image_path and label from the 'images' table
+        select_query = "SELECT img, label FROM predicted_imgs"
+        cursor.execute(select_query)
+        records = cursor.fetchall()
+
+        # Encode BLOB data to Base64 format
+        images = []
+        for record in records:
+            image_path = record[0]
+            label = record[1]
+            image_data = base64.b64encode(image_path).decode('utf-8')
+            images.append((image_data, label))
+
+        return render_template('dashboard.html', images=images)
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Failed to fetch images.'}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)
