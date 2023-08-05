@@ -8,7 +8,7 @@
     {% include 'header.html' %}
     <div class="upload-container">
         <label for="file-upload" class="upload-btn">Choose an Image</label>
-        <input type="file" id="file-upload" accept="image/*">
+        <input type="file" name="file" id="file-upload" accept="image/*">
     </div>
 
      <div class="image-preview-container">
@@ -16,6 +16,7 @@
     </div>
     
     <button class="predict-btn" id="predict-button" disabled>Predict</button>
+    <button class="store-btn" id="store-button">Store Image</button>
     <div id="result"></div>
 
     <!-- {% include 'footer.html' %} -->
