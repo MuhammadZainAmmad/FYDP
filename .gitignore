@@ -22,6 +22,7 @@
 5_CausualFormalPredUsingANN/ANN_2Hidden.h5
 
 testImages/
+tasks.txt
 
 5_CausualFormalPredUsingANN/casualShirt.jpg
 5_CausualFormalPredUsingANN/formalShirt.jpg

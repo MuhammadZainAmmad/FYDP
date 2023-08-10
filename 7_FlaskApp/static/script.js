@@ -26,41 +26,10 @@ fileUpload.addEventListener('change', function () {
 
 predictButton.addEventListener('click', async () => {
     if (fileUpload.files && fileUpload.files[0]) {
-        // Uploading an image from file upload
-        const formData = new FormData();
-        formData.append('file', fileUpload.files[0]);
-
-        const response = await fetch('/predict', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            const predictedLabel = labelMap[data.predicted_label];
-            resultDiv.innerText = `Predicted Label: ${predictedLabel}`;
-        } else {
-            resultDiv.innerText = 'Failed to make a prediction.';
-        }
+        await predictAndDisplayLabel(fileUpload.files[0]);
     } else if (previewImage.src) {
-        // Capturing an image from the camera
         const imgBlob = await fetch(previewImage.src).then(response => response.blob());
-
-        const formData = new FormData();
-        formData.append('file', imgBlob);
-
-        const response = await fetch('/predict', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            const predictedLabel = labelMap[data.predicted_label];
-            resultDiv.innerText = `Predicted Label: ${predictedLabel}`;
-        } else {
-            resultDiv.innerText = 'Failed to make a prediction.';
-        }
+        await predictAndDisplayLabel(imgBlob);
     } else {
         resultDiv.innerText = 'Please choose an image first.';
     }
@@ -68,41 +37,68 @@ predictButton.addEventListener('click', async () => {
 
 storeButton.addEventListener('click', async () => {
     if (fileUpload.files && fileUpload.files[0]) {
-        const formData = new FormData();
-        formData.append('file', fileUpload.files[0]);
-
-        const predictResponse = await fetch('/predict', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (predictResponse.ok) {
-            const predictData = await predictResponse.json();
-            const predictedLabel = labelMap[predictData.predicted_label];
-
-            // Send both the image and predicted label together
-            formData.append('predicted_label', predictedLabel);
-
-            const storeResponse = await fetch('/store_image', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (storeResponse.ok) {
-                alert('Image and label stored successfully!');
-            } else {
-                alert('Failed to store image and label.');
-            }
-        } else {
-            alert('Failed to make a prediction.');
-        }
+        const formData = createFormData(fileUpload.files[0]);
+        await predictStoreAndDisplayResult(formData);
     } else if (previewImage.src) {
-        // If no file selected but a preview image is available (captured from camera)
         const dataURL = previewImage.src;
         const blob = dataURItoBlob(dataURL);
+        const formData = createFormData(blob);
+        await predictStoreAndDisplayResult(formData);
+    } else {
+        alert('Please choose an image first.');
+    }
+});
 
-        const formData = new FormData();
-        formData.append('image_data', blob);
+cameraButton.addEventListener('click', async () => { 
+    // Use the getUserMedia API to capture image from camera
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const track = stream.getVideoTracks()[0];
+    const imageCapture = new ImageCapture(track);
+
+    try {
+        const blob = await imageCapture.takePhoto();
+
+        // Convert the captured image to a base64 data URL
+        const base64Image = await blobToBase64(blob);
+
+        // Display the captured image in the preview area
+        previewImage.setAttribute('src', base64Image);
+
+        // Enable predict and store buttons
+        predictButton.disabled = false;
+        storeButton.disabled = false;
+
+    } catch (error) {
+        console.error('Error capturing image:', error);
+    }
+});
+
+async function predictAndDisplayLabel(imageData) {
+    const formData = createFormData(imageData);
+    const response = await fetch('/predict', {
+        method: 'POST',
+        body: formData
+    });
+
+    if (response.ok) {
+        const data = await response.json();
+        const predictedLabel = labelMap[data.predicted_label];
+        resultDiv.innerText = `Predicted Label: ${predictedLabel}`;
+    } else {
+        resultDiv.innerText = 'Failed to make a prediction.';
+    }
+}
+
+async function predictStoreAndDisplayResult(formData) {
+    const predictResponse = await fetch('/predict', {
+        method: 'POST',
+        body: formData
+    });
+
+    if (predictResponse.ok) {
+        const predictData = await predictResponse.json();
+        const predictedLabel = labelMap[predictData.predicted_label];
+        formData.append('predicted_label', predictedLabel);
 
         const storeResponse = await fetch('/store_image', {
             method: 'POST',
@@ -110,31 +106,39 @@ storeButton.addEventListener('click', async () => {
         });
 
         if (storeResponse.ok) {
-            alert('Image captured from camera and stored successfully!');
+            alert('Image and label stored successfully!');
         } else {
-            alert('Failed to capture and store image.');
+            alert('Failed to store image and label.');
         }
     } else {
-        alert('Please choose an image first.');
+        alert('Failed to make a prediction.');
     }
-});
+}
 
+function createFormData(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return formData;
+}
 
-cameraButton.addEventListener('click', () => {
-    // Use the getUserMedia API to capture image from camera
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            const track = stream.getVideoTracks()[0];
-            const imageCapture = new ImageCapture(track);
-            return imageCapture.takePhoto();
-        })
-        .then(blob => {
-            // Display the captured image in the preview
-            previewImage.src = URL.createObjectURL(blob);
-            predictButton.disabled = false;
-            storeButton.disabled = false;
-        })
-        .catch(error => {
-            console.error('Error capturing image:', error);
-        });
-});
+async function blobToBase64(blob) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            resolve(reader.result);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+}
+
+function dataURItoBlob(dataURI) {
+    const byteString = atob(dataURI.split(',')[1]);
+    const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+}
