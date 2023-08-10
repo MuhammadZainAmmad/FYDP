@@ -1,4 +1,4 @@
-import os
+import io
 import numpy as np
 import tensorflow as tf
 from flask import Flask, render_template, request, jsonify
@@ -101,6 +101,33 @@ def dashboard():
         print(e)
         return jsonify({'error': 'Failed to fetch images.'}), 500
 
+@app.route('/capture', methods=['POST'])
+def capture():
+    try:
+        image_data = request.data
+        if image_data:
+            # Convert the received image data to bytes
+            image_bytes = base64.b64decode(image_data)
+
+            # Convert bytes to a PIL Image
+            img = Image.open(io.BytesIO(image_bytes))
+
+            # Perform prediction and storage similar to /store_image route
+            
+            # Load the model and make predictions
+            loaded_model = tf.keras.models.load_model(model_path)
+            prediction = loaded_model.predict(img)
+            predicted_label = np.argmax(prediction)
+
+            # Convert predicted_label to a human-readable label
+            label_map = {0: 'Informal', 1: 'Formal'}
+            predicted_label = label_map.get(predicted_label)
+            return jsonify({'message': 'Image captured from camera and stored successfully!'})
+        else:
+            return jsonify({'error': 'No image data received.'}), 400
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Failed to capture and store image.'}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -9,7 +9,10 @@
     <div class="upload-container">
         <label for="file-upload" class="upload-btn">Choose an Image</label>
         <input type="file" name="file" id="file-upload" accept="image/*">
+
+        <button class="camera-btn" id="camera-button">Capture from Camera</button>
     </div>
+
 
      <div class="image-preview-container">
         <img src="#" id="preview-image" alt="Preview">
@@ -22,5 +25,46 @@
     <!-- {% include 'footer.html' %} -->
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    
+    <script>
+        const cameraButton = document.getElementById('camera-button');
+        const previewImage = document.getElementById('preview-image');
+
+        cameraButton.addEventListener('click', async () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = previewImage.naturalWidth;
+            canvas.height = previewImage.naturalHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(previewImage, 0, 0, canvas.width, canvas.height);
+
+            const dataURL = canvas.toDataURL('image/jpeg', 1.0);
+            const blob = dataURItoBlob(dataURL);
+
+            const formData = new FormData();
+            formData.append('image_data', blob);
+
+            const response = await fetch('/capture', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                alert('Image captured from camera and stored successfully!');
+            } else {
+                alert('Failed to capture and store image.');
+            }
+        });
+
+        function dataURItoBlob(dataURI) {
+            const byteString = atob(dataURI.split(',')[1]);
+            const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+            const ab = new ArrayBuffer(byteString.length);
+            const ia = new Uint8Array(ab);
+            for (let i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            return new Blob([ab], { type: mimeString });
+        }
+    </script>
 </body>
 </html>
