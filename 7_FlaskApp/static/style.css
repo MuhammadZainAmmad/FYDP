@@ -3,7 +3,17 @@ body {
     margin: 0;
     padding: 0;
     text-align: center;
+    overflow-x: hidden;
 }
+
+.myh1 {
+    font-size: 40px;
+    font-weight: 600;
+    background-image: radial-gradient(circle, #553c9a, #ee4b2b);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+  }
 
 a:link, a:visited {
     background-color: #646060;
@@ -28,8 +38,8 @@ a:hover, a:active {
 }
 
 #preview-image {
-    max-width: 400px;
-    max-height: 400px;
+    max-width: 200px;
+    max-height: 200px;
     margin: 20px auto;
 }
 
@@ -121,7 +131,7 @@ footer {
     background-color: #333;
     color: #fff;
     padding: 10px 20px;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
 }
