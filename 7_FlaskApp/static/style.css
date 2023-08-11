@@ -21,8 +21,7 @@ a:hover, a:active {
 }
 
 .upload-container {
-    display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     margin-bottom: 20px;
     margin-top: 20px;
@@ -44,7 +43,7 @@ input[type="file"] {
     display: none;
 }
 
-label.upload-btn {
+label.upload-btn, .camera-btn {
     background-color: #4CAF50;
     color: white;
     padding: 10px 20px;
@@ -53,8 +52,13 @@ label.upload-btn {
     transition: background-color 0.3s ease;
 }
 
-label.upload-btn:hover {
+label.upload-btn:hover, .camera-btn:hover {
     background-color: #45a049;
+}
+
+.camera-btn {
+    border: none;
+    font-size: 16px;
 }
 
 .predict-btn, .store-btn {
