@@ -137,6 +137,25 @@ def capture():
     except Exception as e:
         print(e)
         return jsonify({'error': 'Failed to capture and store image.'}), 500
+    
+@app.route('/search_result')
+def search_result():
+    try:
+        search_query = request.args.get('search', '')
+        
+        if search_query:
+            # Retrieve image_path and label from the 'images' table based on the search query
+            select_query = "SELECT img, label FROM predicted_imgs WHERE LOWER(label) = %s"
+            cursor.execute(select_query, (search_query,))
+            records = cursor.fetchall()
+
+            return render_template('search_result.html', images=records, search_query=search_query)
+        else:
+            return render_template('search_result.html', images=[], search_query='')
+    
+    except Exception as e:
+        print(e)
+        return jsonify({'error': 'Failed to fetch search results.'}), 500
 
 
 if __name__ == '__main__':

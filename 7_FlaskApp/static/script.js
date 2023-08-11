@@ -4,6 +4,8 @@ const predictButton = document.getElementById('predict-button');
 const storeButton = document.getElementById('store-button');
 const previewImage = document.getElementById('preview-image');
 const resultDiv = document.getElementById('result');
+const searchInput = document.getElementById('search-input');
+const searchButton = document.getElementById('search-button');
 
 const labelMap = {
     0: 'Informal',
@@ -72,6 +74,16 @@ cameraButton.addEventListener('click', async () => {
         console.error('Error capturing image:', error);
     }
 });
+
+searchButton.addEventListener('click', async () => {
+    const searchQuery = searchInput.value.toLowerCase();
+    if (searchQuery) {
+        window.location.href = `/search_result?search=${searchQuery}`;
+    } else {
+        window.location.href = '/search_result';
+    }
+});
+
 
 async function predictAndDisplayLabel(imageData) {
     const formData = createFormData(imageData);
