@@ -1,4 +1,5 @@
 body {
+    background-color: #dddddd !important;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -17,7 +18,7 @@ body {
 
 a:link, a:visited {
     background-color: #646060;
-    color: white;
+    color: #ffffffc8;
     padding: 10px 10px;
     text-align: center;
     text-decoration: none;
@@ -26,7 +27,7 @@ a:link, a:visited {
     margin-left: 3px;
   }
   
-a:hover, a:active {
+a:hover, a:active, #search-button:hover {
     background-color: rgba(255, 255, 255, 0.532);
 }
 
@@ -89,7 +90,7 @@ label.upload-btn:hover, .camera-btn:hover {
 /* Header styles */
 header {
     background-color: #000;
-    color: #fff;
+    color: #ffffffc3;
     padding: 10px;
 }
 
@@ -105,6 +106,34 @@ header {
 
 .navbar-buttons {
     display: flex;
+}
+
+#search-input{
+    margin-left: 3px;
+    border-radius: 5px;
+    border: none;
+    padding: 0px 5px;
+    background-color: #646060;
+    font-size: 15px;
+}
+::placeholder { 
+    color: #fefefe86;
+}
+#search-input:focus, #search-input:enabled{
+    background-color: rgba(255, 255, 255, 0.532);
+    border: none;
+    margin: 0px 5px; 
+    color: #ffffffc8;
+}
+
+#search-button{
+    margin-left: 1px;
+    border-radius: 5px;
+    border: none;
+    padding: 0px 5px;
+    background-color: #646060;
+    color: #ffffffc8;
+    font-size: 15px;
 }
 
 .login-btn,
@@ -129,7 +158,7 @@ header {
 /* Footer styles */
 footer {
     background-color: #333;
-    color: #fff;
+    color: #ffffffc8;
     padding: 10px 20px;
     position: fixed;
     bottom: 0;
@@ -144,4 +173,30 @@ footer {
 
 p {
     margin: 0;
+}
+
+/* Additional CSS styles for image dashboard */
+.image-dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    justify-items: center;
+    margin: 20px;
+}
+
+.image-item {
+    text-align: center;
+}
+
+.image-item img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.image-label {
+    margin-top: 5px;
+    font-weight: bold;
 }

@@ -84,6 +84,19 @@ searchButton.addEventListener('click', async () => {
     }
 });
 
+// Add this code in your script.js file
+if (searchButton) {
+    searchButton.addEventListener('click', async () => {
+        const searchQuery = searchInput.value.toLowerCase();
+        if (searchQuery) {
+            window.location.href = `/search_result?search=${searchQuery}`;
+        } else {
+            window.location.href = '/search_result';
+        }
+    });
+}
+
+
 
 async function predictAndDisplayLabel(imageData) {
     const formData = createFormData(imageData);
