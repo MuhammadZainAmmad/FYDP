@@ -32,3 +32,6 @@ tasks.txt
 7_FlaskApp/tensorboard_cifar_logs/
 7_FlaskApp/ANN_2Hidden.h5
 7_FlaskApp/uploads/
+
+8_CasualFormalPredUsingCNN/cnn_usage.h5
+8_CasualFormalPredUsingCNN/cnn_articleType.h5
