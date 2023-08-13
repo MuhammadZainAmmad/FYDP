@@ -7,9 +7,20 @@ const resultDiv = document.getElementById('result');
 const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-button');
 
-const labelMap = {
+// const labelMap = {
+//     0: 'Informal',
+//     1: 'Formal',
+// };
+
+const usageLabelMap = {
     0: 'Informal',
     1: 'Formal',
+};
+
+const articleTypeLabelMap = {
+    0: 'Shirt',
+    1: 'Tshirt',
+    2: 'Trouser',
 };
 
 fileUpload.addEventListener('change', function () {
@@ -28,10 +39,10 @@ fileUpload.addEventListener('change', function () {
 
 predictButton.addEventListener('click', async () => {
     if (fileUpload.files && fileUpload.files[0]) {
-        await predictAndDisplayLabel(fileUpload.files[0]);
+        await predictAndDisplayLabels(fileUpload.files[0]);
     } else if (previewImage.src) {
         const imgBlob = await fetch(previewImage.src).then(response => response.blob());
-        await predictAndDisplayLabel(imgBlob);
+        await predictAndDisplayLabels(imgBlob);
     } else {
         resultDiv.innerText = 'Please choose an image first.';
     }
@@ -98,7 +109,23 @@ if (searchButton) {
 
 
 
-async function predictAndDisplayLabel(imageData) {
+// async function predictAndDisplayLabel(imageData) {
+//     const formData = createFormData(imageData);
+//     const response = await fetch('/predict', {
+//         method: 'POST',
+//         body: formData
+//     });
+
+//     if (response.ok) {
+//         const data = await response.json();
+//         const predictedLabel = labelMap[data.predicted_label];
+//         resultDiv.innerText = `Predicted Label: ${predictedLabel}`;
+//     } else {
+//         resultDiv.innerText = 'Failed to make a prediction.';
+//     }
+// }
+
+async function predictAndDisplayLabels(imageData) {
     const formData = createFormData(imageData);
     const response = await fetch('/predict', {
         method: 'POST',
@@ -107,8 +134,10 @@ async function predictAndDisplayLabel(imageData) {
 
     if (response.ok) {
         const data = await response.json();
-        const predictedLabel = labelMap[data.predicted_label];
-        resultDiv.innerText = `Predicted Label: ${predictedLabel}`;
+        const predictedUsageLabel = data.predicted_label_usage;
+        const predictedArticleTypeLabel = data.predicted_label_article_type;
+        
+        resultDiv.innerText = `Uploaded article is "${predictedUsageLabel} ${predictedArticleTypeLabel}"`;
     } else {
         resultDiv.innerText = 'Failed to make a prediction.';
     }
@@ -122,7 +151,7 @@ async function predictStoreAndDisplayResult(formData) {
 
     if (predictResponse.ok) {
         const predictData = await predictResponse.json();
-        const predictedLabel = labelMap[predictData.predicted_label];
+        const predictedLabel = predictData.predicted_label;
         formData.append('predicted_label', predictedLabel);
 
         const storeResponse = await fetch('/store_image', {

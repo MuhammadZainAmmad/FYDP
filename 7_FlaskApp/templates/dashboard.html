@@ -13,7 +13,8 @@
         {% for image in images %}
         <div class="image-item">
             <img src="{{ url_for('uploaded_file', filename=image[0]) }}" alt="Image">
-            <p class="image-label">Label: {{ image[1] }}</p>
+            <!-- <p class="image-label">Label: {{ image[1] }}</p> -->
+            <p class="image-label">{{ image[1] }} {{ image[2] }}</p>
         </div>
         {% endfor %}
     </div>
