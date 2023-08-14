@@ -11,6 +11,7 @@
 3_PreprocessingMaleDS/reduced_articleTypes/
 3_PreprocessingMaleDS/usage/
 3_PreprocessingMaleDS/finalDS/
+3_PreprocessingMaleDS/finalDS_categories/
 3_PreprocessingMaleDS/df_images.npy
 3_PreprocessingMaleDS/df_usageEncoded.npy
 3_PreprocessingMaleDS/df_articleTypeEncoded.npy

@@ -88,15 +88,10 @@ def predict():
 
             # Convert predicted_label_usage and predicted_label_article_type to human-readable labels
             label_map_usage = {0: 'Informal', 1: 'Formal'}
-            label_map_article_type = {0: 'Shirt', 1: 'Tshirt', 2: 'Trouser'}
+            # label_map_article_type = {0: 'Shirt', 1: 'Tshirt', 2: 'Bottom wear'}
+            label_map_article_type = {0: 'Shirt', 2: 'Tshirt', 1: 'Bottom wear'}
             predicted_label_usage = label_map_usage.get(predicted_label_usage)
             predicted_label_article_type = label_map_article_type.get(predicted_label_article_type)
-            
-            print(predicted_label_usage)
-            print(predicted_label_article_type)
-
-            # Convert numpy int64 to regular Python int
-            # predicted_label_article_type = predicted_label_article_type.item()
 
             # Return the predicted labels as a JSON response
             return jsonify({'predicted_label_usage': predicted_label_usage, 'predicted_label_article_type': predicted_label_article_type})
@@ -158,7 +153,8 @@ def store_image():
         
         # Convert predicted_label_usage and predicted_label_article_type to human-readable labels
         label_map_usage = {0: 'Informal', 1: 'Formal'}
-        label_map_article_type = {0: 'Shirt', 1: 'Tshirt', 2: 'Trouser'}
+        # label_map_article_type = {0: 'Shirt', 1: 'Tshirt', 2: 'Bottom wear'}
+        label_map_article_type = {0: 'Shirt', 2: 'Tshirt', 1: 'Bottom wear'}
         predicted_label_usage = label_map_usage.get(predicted_label_usage)
         predicted_label_article_type = label_map_article_type.get(predicted_label_article_type)
 
@@ -279,7 +275,8 @@ def capture():
 
             # Convert predicted_label_usage and predicted_label_article_type to human-readable labels
             label_map_usage = {0: 'Informal', 1: 'Formal'}
-            label_map_article_type = {0: 'Shirt', 1: 'Tshirt', 2: 'Trouser'}
+            # label_map_article_type = {0: 'Shirt', 1: 'Tshirt', 2: 'Bottom wear'}
+            label_map_article_type = {0: 'Shirt', 2: 'Tshirt', 1: 'Bottom wear'}
             predicted_label_usage = label_map_usage.get(predicted_label_usage)
             predicted_label_article_type = label_map_article_type.get(predicted_label_article_type)
 
@@ -299,15 +296,72 @@ def capture():
         return jsonify({'error': 'Failed to capture and store image.'}), 500
 
 
+# @app.route('/search_result')
+# def search_result():
+#     try:
+#         search_query = request.args.get('search', '')
+        
+#         if search_query:
+#             # Retrieve image_path, usage, and article_type from the 'images' table based on the search query
+#             # select_query = "SELECT img, usages, articleType FROM predicted_imgs2 WHERE LOWER(usages) = %s OR LOWER(articleType) = %s"
+#             select_query = """
+#                 SELECT img, usages, articleType FROM predicted_imgs2 
+#                 WHERE 
+#                     LOWER(usages) = %s 
+#                     OR LOWER(articleType) = %s 
+#             """
+#             cursor.execute(select_query, (search_query, search_query))
+#             records = cursor.fetchall()
+
+#             return render_template('search_result.html', images=records, search_query=search_query)
+#         else:
+#             return render_template('search_result.html', images=[], search_query='')
+    
+#     except Exception as e:
+#         print(e)
+#         return jsonify({'error': 'Failed to fetch search results.'}), 500
+
 @app.route('/search_result')
 def search_result():
     try:
         search_query = request.args.get('search', '')
         
         if search_query:
-            # Retrieve image_path, usage, and article_type from the 'images' table based on the search query
-            select_query = "SELECT img, usages, articleType FROM predicted_imgs2 WHERE LOWER(usages) = %s OR LOWER(articleType) = %s"
-            cursor.execute(select_query, (search_query, search_query))
+            # Split the search query into individual terms
+            search_terms = search_query.lower().split()
+
+            # Initialize an empty list to store the search conditions
+            conditions = []
+
+            # Loop through the search terms and generate search conditions based on labels
+            for term in search_terms:
+                if term == 'formal':
+                    conditions.append("LOWER(usages) = 'formal'")
+                elif term == 'informal':
+                    conditions.append("LOWER(usages) = 'informal'")
+                elif term == 'shirt':
+                    conditions.append("LOWER(articleType) = 'shirt'")
+                elif term == 'tshirt':
+                    conditions.append("LOWER(articleType) = 'tshirt'")
+                elif term == 'bottom' and 'wear' in search_terms:
+                    conditions.append("LOWER(articleType) = 'bottom wear'")
+                elif term == 'bottom wear':
+                    conditions.append("LOWER(articleType) = 'bottom wear'")
+                else:
+                    conditions.append(f"LOWER(usages) = '{term}' OR LOWER(articleType) = '{term}'")
+
+            # Join the search conditions with 'AND' to create the final SQL condition
+            sql_condition = ' AND '.join(conditions)
+
+            # Construct the SQL query to search for images based on the generated condition
+            select_query = f"""
+                SELECT img, usages, articleType
+                FROM predicted_imgs2
+                WHERE {sql_condition}
+            """
+
+            # Execute the SQL query
+            cursor.execute(select_query)
             records = cursor.fetchall()
 
             return render_template('search_result.html', images=records, search_query=search_query)
@@ -317,6 +371,7 @@ def search_result():
     except Exception as e:
         print(e)
         return jsonify({'error': 'Failed to fetch search results.'}), 500
+
 
 
 
