@@ -25,13 +25,6 @@ db_config = {
 connection = mysql.connector.connect(**db_config)
 cursor = connection.cursor()
 
-# def preprocess_image(image):
-#     img = image.resize((80, 60))
-#     img_arr = np.array(img) / 255.0
-#     flat_img_arr = img_arr.reshape(-1)
-#     input_img = np.expand_dims(flat_img_arr, axis=0)
-#     return input_img
-
 def preprocess_image(image):
     img = image.resize((80, 60))
     img_arr = np.array(img) / 255.0
@@ -47,26 +40,6 @@ def uploaded_file(filename):
 @app.route('/')
 def index():
     return render_template('index.html')
-
-# @app.route('/predict', methods=['POST'])
-# def predict():
-#     file = request.files['file']
-#     if file:
-#         img = Image.open(file)
-#         input_img = preprocess_image(img)
-
-#         # Load the model and make predictions
-#         loaded_model = tf.keras.models.load_model(model_path)
-#         prediction = loaded_model.predict(input_img)
-#         predicted_label = np.argmax(prediction)
-
-#         # Convert predicted_label to a Python int
-#         predicted_label = int(predicted_label)
-
-#         # Return the predicted label as a JSON response
-#         return jsonify({'predicted_label': predicted_label})
-#     else:
-#         return jsonify({'error': 'No file uploaded.'}), 400
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -100,39 +73,6 @@ def predict():
     except Exception as e:
         print(e)
         return jsonify({'error': 'Failed to predict.'}), 500
-
-
-# @app.route('/store_image', methods=['POST'])
-# def store_image():
-#     file = request.files['file']
-#     if file:
-#         img = Image.open(file)
-#         input_img = preprocess_image(img)
-
-#         # Load the model and make predictions
-#         loaded_model = tf.keras.models.load_model(model_path)
-#         prediction = loaded_model.predict(input_img)
-#         predicted_label = np.argmax(prediction)
-
-#         # Convert predicted_label to a human-readable label
-#         label_map = {0: 'Informal', 1: 'Formal'}
-#         predicted_label = label_map.get(predicted_label)
-
-#         # Generate a unique filename for the image
-#         image_filename = f"{time.time()}.jpg"
-#         image_path = os.path.join("uploads", image_filename)
-
-#         # Save the image to the "uploads" folder
-#         img.save(image_path)
-
-#         # Save the image path and label in the database
-#         insert_query = "INSERT INTO predicted_imgs (img, label) VALUES (%s, %s)"
-#         cursor.execute(insert_query, (image_filename, predicted_label))
-#         connection.commit()
-
-#         return jsonify({'message': 'Image and label stored successfully!'})
-#     else:
-#         return jsonify({'error': 'No file uploaded.'}), 400
 
 @app.route('/store_image', methods=['POST'])
 def store_image():
@@ -174,19 +114,6 @@ def store_image():
     else:
         return jsonify({'error': 'No file uploaded.'}), 400
 
-# @app.route('/dashboard')
-# def dashboard():
-#     try:
-#         # Retrieve image_path and label from the 'images' table
-#         select_query = "SELECT img, label FROM predicted_imgs"
-#         cursor.execute(select_query)
-#         records = cursor.fetchall()
-
-#         return render_template('dashboard.html', images=records)
-#     except Exception as e:
-#         print(e)
-#         return jsonify({'error': 'Failed to fetch images.'}), 500
-
 @app.route('/dashboard')
 def dashboard():
     try:
@@ -199,56 +126,6 @@ def dashboard():
     except Exception as e:
         print(e)
         return jsonify({'error': 'Failed to fetch images.'}), 500
-
-# @app.route('/capture', methods=['POST'])
-# def capture():
-#     try:
-#         data = request.get_json()
-#         image_data = data.get('image_data')
-
-#         if image_data:
-#             # Convert the base64-encoded image data to bytes
-#             image_bytes = base64.b64decode(image_data.split(',')[1])
-
-#             # Convert bytes to a PIL Image
-#             img = Image.open(io.BytesIO(image_bytes))
-
-#             # Perform prediction and storage similar to /store_image route
-            
-#             # Load the model and make predictions
-#             loaded_model = tf.keras.models.load_model(model_path)
-#             prediction = loaded_model.predict(preprocess_image(img))
-#             predicted_label = np.argmax(prediction)
-
-#             # Convert predicted_label to a human-readable label
-#             label_map = {0: 'Informal', 1: 'Formal'}
-#             predicted_label = label_map.get(predicted_label)
-
-#             return jsonify({'message': 'Image captured from camera and stored successfully!'})
-#         else:
-#             return jsonify({'error': 'No image data received.'}), 400
-#     except Exception as e:
-#         print(e)
-#         return jsonify({'error': 'Failed to capture and store image.'}), 500
-    
-# @app.route('/search_result')
-# def search_result():
-#     try:
-#         search_query = request.args.get('search', '')
-        
-#         if search_query:
-#             # Retrieve image_path and label from the 'images' table based on the search query
-#             select_query = "SELECT img, label FROM predicted_imgs WHERE LOWER(label) = %s"
-#             cursor.execute(select_query, (search_query,))
-#             records = cursor.fetchall()
-
-#             return render_template('search_result.html', images=records, search_query=search_query)
-#         else:
-#             return render_template('search_result.html', images=[], search_query='')
-    
-#     except Exception as e:
-#         print(e)
-#         return jsonify({'error': 'Failed to fetch search results.'}), 500
 
 @app.route('/capture', methods=['POST'])
 def capture():
@@ -295,32 +172,6 @@ def capture():
         print(e)
         return jsonify({'error': 'Failed to capture and store image.'}), 500
 
-
-# @app.route('/search_result')
-# def search_result():
-#     try:
-#         search_query = request.args.get('search', '')
-        
-#         if search_query:
-#             # Retrieve image_path, usage, and article_type from the 'images' table based on the search query
-#             # select_query = "SELECT img, usages, articleType FROM predicted_imgs2 WHERE LOWER(usages) = %s OR LOWER(articleType) = %s"
-#             select_query = """
-#                 SELECT img, usages, articleType FROM predicted_imgs2 
-#                 WHERE 
-#                     LOWER(usages) = %s 
-#                     OR LOWER(articleType) = %s 
-#             """
-#             cursor.execute(select_query, (search_query, search_query))
-#             records = cursor.fetchall()
-
-#             return render_template('search_result.html', images=records, search_query=search_query)
-#         else:
-#             return render_template('search_result.html', images=[], search_query='')
-    
-#     except Exception as e:
-#         print(e)
-#         return jsonify({'error': 'Failed to fetch search results.'}), 500
-
 @app.route('/search_result')
 def search_result():
     try:
@@ -345,11 +196,13 @@ def search_result():
                     conditions.append("LOWER(articleType) = 'tshirt'")
                 elif term == 'bottom' and 'wear' in search_terms:
                     conditions.append("LOWER(articleType) = 'bottom wear'")
-                elif term == 'bottom wear':
+                elif term == 'bottom':
                     conditions.append("LOWER(articleType) = 'bottom wear'")
+                elif term == 'wear':
+                    pass
                 else:
                     conditions.append(f"LOWER(usages) = '{term}' OR LOWER(articleType) = '{term}'")
-
+                    
             # Join the search conditions with 'AND' to create the final SQL condition
             sql_condition = ' AND '.join(conditions)
 
@@ -371,9 +224,6 @@ def search_result():
     except Exception as e:
         print(e)
         return jsonify({'error': 'Failed to fetch search results.'}), 500
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)

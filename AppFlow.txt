@@ -1,0 +1,118 @@
+========================================= Preprocessing ==============================================
+original ds contained 44,441 data points
+1) skipped 22 erroneous records from the csv file of original ds as they contain comma separated values 
+   in productDisplayName causing an extra column
+2) dropped 5 irrelevant features.
+3) removed 317 rows that contain null values for usage column 
+4) we intially restricted ourselves for men dressing so we extract a subset of original ds that contain 
+   data points for boys, men and unisex dressing hence ds reduced to 25,085 samples
+5) removed those 5 records whose images were missing 
+6) removed 299 black and white images which were causing channel mismatch with 3d images.
+7) removed irrelevant articles hence shrunk the ds to 10,842 samples
+8) mapped similar articleType labels to 1 class e.g mapped trouser, pent to 1 label called bottom wear 
+   hence reduced to 3 labels in articleType namely shirt, tshirt and bottom wear 
+9) mapped similar usage labels to 1 class e.g mapped casual and sport to 1 label called informal 
+   hence reduced to just 2 labels in usage namely formal and informal
+10) finally we prepare our ds for model training i.e. we transform our images into 3d array and saved
+    them as a 4d np array. Similarly we binary encode usage column and one hot encode articleType column
+    and store them as .npy file as well so that we dont have to repeat this step every time 
+
+========================================= Model implementation ========================================
+1) Pretrained Model (Inception Resnet V2)
+      We first tried a pretrained model for the articleType classification but it wasn't providing us 
+      the satisfying result so we moved towards building an ANN from scratch
+
+2) ANN from scratch 
+      Before feeding our ds to ANN we had to perform some more preprocessing on it so we first normalize
+      each pixel value between 0 and 1 and then we transform our 4d tensor of images into a 2d tensor
+      i.e. we flatten each image 3d array into 1d array and splitted our ds into train, validation and
+      test ds
+      We user Keras library Sequential API to define the architecture of our ANN which had 1 input layer 
+      of 128 neurons, 2 hidden layers having 64 and 16 neurons respectively and the last output layer had 
+      2 neurons as we were going to train it for usage column which had 2 labels. input and the two hidden
+      layers used relu as activation function while the output layer used softmax and all the layers were
+      fully connected 
+      We evaluate our model on test ds and it was giving us 95% accuracy but was not classifying the real
+      world images accurately and that was b/c we had the imbalanced ds having more samples for informal class
+      So we moved towards CNN models as they are specific for image related tasks
+
+3) CNN from scratch 
+      We trained 2 separate models for each classification that is 1 for usage classification and other 
+      for articleType classification but both models had similar architecture and they only differ in 
+      the output layer i.e. usage cnn had 2 neurons in output layer as it was binary classification while
+      articleType cnn had 3 neurons as it was for multiclass classification
+      Both models had 3 convolution layers followed by 3 max pooling layer. There were 32, 64 and 128 
+      3 by 3 filters respectively in each convolution layer while max pooling had the 2 by 2 kernel size
+      They are followed by flattening layer which flatten the output by convolution layer and pass it to 
+      fully connected layer having 128 neurons and after that layer we had a drop out layer with a rate of 
+      0.5 to avoid overfitting and lastly we had the output layer which had 2 neurons for usage model and
+      3 for articleType model
+      We evaluate our both models and they were giving satisfying values for accuracy, precision and 
+      recall hence we saved both the models and integrate them with our application
+
+=========================================== Backend ========================================================
+1) Streamlit 
+      We first tried the pyhton open source web application framework called Streamlit but due to the version
+      incompatibility issue and since our application is a medium scale application hence we had to moved
+      towards some more sophosticated web framework so we opt for flask 
+
+2) Flask app 
+      In the flask backend of our app we first define the function to preprocess the images pass by the 
+      frontend of our application and we loaded our pretrained models for prediction of those images 
+      We created a folder on our disk to store the predicted images and used MySQL database to store 
+      the address of those predicted images along with their labels in order to facilitate the dashboard and 
+      search functionality of our application.
+      Then we have a route in our application that redirect the user who access localhost 5000 to our app 
+      index.html and that route has different end points to handle different functionality
+
+      The /predict endpoint is responsible for handling predictions based on uploaded or captured images. 
+      It uses the POST HTTP method to receive image data, performs prediction using the loaded CNN models, 
+      and returns the predicted labels as a JSON response.
+
+      The /store_image endpoint is used to store images along with their predicted labels in the database. 
+      It also uses the POST HTTP method to receive image data, performs prediction, stores the image, and 
+      sends a response indicating whether the image was stored successfully.
+
+      The /dashboard endpoint is used to display the dashboard page, where users can view a grid of images 
+      along with their predicted labels. The view function retrieves image data from the database and renders 
+      the dashboard.html template.
+
+      The /search_result endpoint handles the search functionality. It retrieves the user's search query, 
+      processes it to generate search conditions, fetches matching images from the database, and renders the
+      search_result.html template with the search results.
+
+      The /capture endpoint enables the user to directly capture an image using their device's camera, 
+      predict its labels, and store it in the database for later viewing. 
+
+=========================================== Frontend ==================================================
+For the frontend part we used core HTML, CSS and JS 
+1) Layout
+      The layout of application is designed using core HTML. There are 3 pages in our appplication,
+      the first page of our appplication is the home page which deals with the user input in form of 
+      image, user can upload an image from his mobile or computer and can directly capture his image via camera,
+      in both the cases image is previewed to the user and user may predict it using our pretrained models by 
+      just clicking on predict button and can store the image along with its label by just clicking store image 
+      button, the user will be prompted on the successfull storeage of image in the database
+      User can view all his stored images on the dashboard page where the images are responsively aligned in 
+      rows and columns along with theier labels 
+      User can navigate to the Home and dashboard page via header of our application. Additionally user can 
+      search his wardrobe on the basis of usage or article type 
+
+2) Functionality
+      The JS file serves as the core part of our application as it provides functionality to our app. JS 
+      enables us to actively listen to the actions performed by the user, send request to our flask server 
+      as per client request and render the response of server dynamically to the client i.e. user doesn't have 
+      to reload the page every time he predict a new image 
+      We implemented various event listeners that listen to the client requst and provided them with server 
+      response
+
+      fileUpload EventListener: responsible for previewing and reading the image uploaded by user usign upload btn
+      captureImage EventListener: responsible for previewing and reading the image uploaded by user via camera
+                                  It request access to the user camera using getUserMedia api 
+      predictBtn EventListener: on the click of predict button, create formdata of the image, call /predict end point 
+                                and render the response of server to the user
+      storeButton EventListener: it calls two endpoint when user click store image button i.e. first call /predict 
+                                 endpoint to predict the image and then call /store endpoint to store the image 
+                                 and also prompt the user according to the response received by server 
+      searchButton EventListener: it extracts the value entered by user in input field it calls the search result endpoint
+

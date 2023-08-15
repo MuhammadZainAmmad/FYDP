@@ -7,22 +7,6 @@ const resultDiv = document.getElementById('result');
 const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-button');
 
-// const labelMap = {
-//     0: 'Informal',
-//     1: 'Formal',
-// };
-
-const usageLabelMap = {
-    0: 'Informal',
-    1: 'Formal',
-};
-
-const articleTypeLabelMap = {
-    0: 'Shirt',
-    1: 'Tshirt',
-    2: 'Trouser',
-};
-
 fileUpload.addEventListener('change', function () {
     if (fileUpload.files && fileUpload.files[0]) {
         const reader = new FileReader();
@@ -94,36 +78,6 @@ searchButton.addEventListener('click', async () => {
         window.location.href = '/search_result';
     }
 });
-
-// Add this code in your script.js file
-if (searchButton) {
-    searchButton.addEventListener('click', async () => {
-        const searchQuery = searchInput.value.toLowerCase();
-        if (searchQuery) {
-            window.location.href = `/search_result?search=${searchQuery}`;
-        } else {
-            window.location.href = '/search_result';
-        }
-    });
-}
-
-
-
-// async function predictAndDisplayLabel(imageData) {
-//     const formData = createFormData(imageData);
-//     const response = await fetch('/predict', {
-//         method: 'POST',
-//         body: formData
-//     });
-
-//     if (response.ok) {
-//         const data = await response.json();
-//         const predictedLabel = labelMap[data.predicted_label];
-//         resultDiv.innerText = `Predicted Label: ${predictedLabel}`;
-//     } else {
-//         resultDiv.innerText = 'Failed to make a prediction.';
-//     }
-// }
 
 async function predictAndDisplayLabels(imageData) {
     const formData = createFormData(imageData);

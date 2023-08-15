@@ -7,10 +7,10 @@
 <body>
     {% include 'header.html' %}
     <div class="upload-container">
-        <label for="file-upload" class="upload-btn">Select Image</label>
+        <label for="file-upload" class="upload-btn">Upload Image</label>
         <input type="file" name="file" id="file-upload" accept="image/*">
 
-        <button class="camera-btn" id="camera-button">Upload Image</button>
+        <button class="camera-btn" id="camera-button">Capture Image</button>
     </div>
 
 
@@ -21,11 +21,6 @@
     <button class="predict-btn" id="predict-button" disabled>Predict</button>
     <button class="store-btn" id="store-button">Store Image</button>
     <div id="result"></div>
-
-    <!-- <div id="result">
-        Predicted Usage: <span id="predicted-usage"></span><br>
-        Predicted Article Type: <span id="predicted-article-type"></span>
-    </div> -->
 
     {% include 'footer.html' %}
 
