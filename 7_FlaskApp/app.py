@@ -186,9 +186,11 @@ def search_result():
 
             # Loop through the search terms and generate search conditions based on labels
             for term in search_terms:
-                if term == 'formal':
+                formal_labels = ['formal', 'meeting', 'marriage']
+                informal_labels = ['informal', 'party']
+                if term in formal_labels:
                     conditions.append("LOWER(usages) = 'formal'")
-                elif term == 'informal':
+                elif term in informal_labels:
                     conditions.append("LOWER(usages) = 'informal'")
                 elif term == 'shirt':
                     conditions.append("LOWER(articleType) = 'shirt'")

@@ -97,6 +97,7 @@ For the frontend part we used core HTML, CSS and JS
       rows and columns along with theier labels 
       User can navigate to the Home and dashboard page via header of our application. Additionally user can 
       search his wardrobe on the basis of usage or article type 
+      We used Jinja2 templating to pupulate images on dashboard and search_result page
 
 2) Functionality
       The JS file serves as the core part of our application as it provides functionality to our app. JS 
